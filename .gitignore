@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+# mocked data ( for now )
+/database
+/public/products
+
 # testing
 /coverage
 

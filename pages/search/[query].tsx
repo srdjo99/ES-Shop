@@ -1,5 +1,5 @@
 import type { GetServerSideProps, NextPage } from 'next';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { ShopLayout } from '../../components/layout/ShopLayout';
 import { ProductList } from '../../components/products';
@@ -8,9 +8,11 @@ import { IProduct } from '../../interfaces';
 
 interface Props {
   products: IProduct[];
+  foundProducts: boolean;
+  query: string;
 }
 
-const SearchPage: NextPage<Props> = ({ products }) => {
+const SearchPage: NextPage<Props> = ({ products, foundProducts, query }) => {
   return (
     <ShopLayout
       title='ES-Shop - Search '
@@ -19,9 +21,20 @@ const SearchPage: NextPage<Props> = ({ products }) => {
       <Typography variant='h1' component='h1'>
         Search product
       </Typography>
-      <Typography variant='h2' sx={{ mb: 1 }}>
-        ABC --- 123
-      </Typography>
+      {foundProducts ? (
+        <Typography variant='h2' sx={{ mb: 1 }}>
+          Term: {query}
+        </Typography>
+      ) : (
+        <Box display='flex'>
+          <Typography variant='h2' sx={{ mb: 1 }}>
+            We did not find any product
+          </Typography>
+          <Typography variant='h2' sx={{ ml: 1 }} color='secondary'>
+            {query}
+          </Typography>
+        </Box>
+      )}
 
       <ProductList products={products} />
     </ShopLayout>
@@ -42,8 +55,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   let products = await dbProducts.getProductsByTerm(query);
 
+  const foundProducts = products.length > 0;
+  if (!foundProducts) {
+    products = await dbProducts.getAllProducts();
+  }
+
   return {
-    props: { products },
+    props: { products, foundProducts, query },
   };
 };
 

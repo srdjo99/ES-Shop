@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
@@ -12,14 +12,28 @@ import {
   Link,
   Typography,
   IconButton,
+  Input,
+  InputAdornment,
 } from '@mui/material';
-import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
+import {
+  SearchOutlined,
+  ShoppingCartOutlined,
+  ClearOutlined,
+} from '@mui/icons-material';
 
 import { UiContext } from '../../context';
 
 export const Navbar = () => {
-  const { asPath } = useRouter();
+  const { asPath, push } = useRouter();
   const { toggleSideMenu } = useContext(UiContext);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
+  const onSearchTerm = () => {
+    if (searchTerm.trim().length === 0) return;
+    push(`/search/${searchTerm}`);
+  };
 
   return (
     <AppBar>
@@ -61,7 +75,39 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
-        <IconButton>
+        {/* large screen */}
+
+        {isSearchVisible ? (
+          <Input
+            className='fadeIn'
+            autoFocus
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={(e) => (e.key === 'Enter' ? onSearchTerm() : null)}
+            type='text'
+            placeholder='Search...'
+            endAdornment={
+              <InputAdornment position='end'>
+                <IconButton onClick={() => setIsSearchVisible(false)}>
+                  <ClearOutlined />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        ) : (
+          <IconButton
+            onClick={() => setIsSearchVisible(true)}
+            className='fadeIn'
+          >
+            <SearchOutlined />
+          </IconButton>
+        )}
+
+        {/* small screen */}
+        <IconButton
+          sx={{ display: { xs: 'flex', sm: 'none' } }}
+          onClick={toggleSideMenu}
+        >
           <SearchOutlined />
         </IconButton>
 

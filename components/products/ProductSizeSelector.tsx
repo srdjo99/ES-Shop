@@ -6,9 +6,16 @@ import { ISize } from '../../interfaces';
 interface Props {
   selectedSize?: ISize;
   sizes: ISize[];
+
+  // method
+  onSelectedSize: (size: ISize) => void;
 }
 
-export const ProductSizeSelector: FC<Props> = ({ selectedSize, sizes }) => {
+export const ProductSizeSelector: FC<Props> = ({
+  selectedSize,
+  sizes,
+  onSelectedSize,
+}) => {
   return (
     <Box>
       {sizes.map((size) => (
@@ -16,6 +23,7 @@ export const ProductSizeSelector: FC<Props> = ({ selectedSize, sizes }) => {
           key={size}
           size='small'
           color={selectedSize === size ? 'primary' : 'info'}
+          onClick={() => onSelectedSize(size)}
         >
           {size}
         </Button>

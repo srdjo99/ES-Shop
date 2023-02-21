@@ -19,8 +19,14 @@ export const cartReducer = (
     case '[Cart] - LoadCart from cookies | storage':
       return {
         ...state,
+        // not destructuring - always new product
+        cart: action.payload,
       };
-
+    case '[Cart] - Update products in cart':
+      return {
+        ...state,
+        cart: [...action.payload],
+      };
     default:
       return state;
   }

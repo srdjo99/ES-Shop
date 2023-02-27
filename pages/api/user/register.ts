@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 
 import { db } from '../../../database';
 import { User } from '../../../models';
-import { jwt } from '../../../utils';
+import { jwt, validations } from '../../../utils';
 
 type Data =
   | { message: string }
@@ -43,6 +43,12 @@ const registerUser = async (
   if (name.length < 2) {
     return res.status(400).json({
       message: 'Name must be at least 2 characters long',
+    });
+  }
+
+  if (!validations.isValidEmail(email)) {
+    return res.status(400).json({
+      message: 'Email format is not valid',
     });
   }
 

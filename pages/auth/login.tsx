@@ -10,13 +10,17 @@ type FormData = {
 };
 
 const LoginPage = () => {
-  const { register, handleSubmit } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const onLoginUser = (data: FormData) => {};
 
   return (
     <AuthLayout title='Login'>
-      <form onSubmit={handleSubmit(onLoginUser)}>
+      <form onSubmit={handleSubmit(onLoginUser)} noValidate>
         <Box sx={{ width: 350, padding: '10px 20px' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -26,10 +30,15 @@ const LoginPage = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                type='email'
                 label='Email'
                 variant='filled'
                 fullWidth
-                {...register('email')}
+                {...register('email', {
+                  required: 'This field is required',
+                })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
               />
             </Grid>
             <Grid item xs={12}>

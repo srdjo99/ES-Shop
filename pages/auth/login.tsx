@@ -47,7 +47,12 @@ const LoginPage = () => {
                 type='password'
                 variant='filled'
                 fullWidth
-                {...register('password')}
+                {...register('password', {
+                  required: 'This field is required',
+                  minLength: { value: 6, message: 'Min. 6 characters' },
+                })}
+                error={!!errors.password}
+                helperText={errors.password?.message}
               />
             </Grid>
             <Grid item xs={12}>

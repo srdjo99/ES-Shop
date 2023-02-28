@@ -10,11 +10,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-
-import { AuthLayout } from '../../components/layout';
-import { validations } from '../../utils';
-import shopApi from '../../api/shopApi';
 import { ErrorOutline } from '@mui/icons-material';
+
+import { validations } from '../../utils';
+import { AuthLayout } from '../../components/layout';
+import { shopApi } from '../../api';
 
 type FormData = {
   email: string;
@@ -37,7 +37,7 @@ const LoginPage = () => {
       const { token, user } = data;
       console.log({ token, user });
     } catch (error) {
-      console.log('Credentials error');
+      console.log('Wrong credentials');
       setShowError(true);
       setTimeout(() => {
         setShowError(false);

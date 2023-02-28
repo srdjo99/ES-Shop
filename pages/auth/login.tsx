@@ -1,9 +1,20 @@
+import { useState } from 'react';
 import NextLink from 'next/link';
-import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import {
+  Box,
+  Button,
+  Chip,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { AuthLayout } from '../../components/layout';
 import { validations } from '../../utils';
+import shopApi from '../../api/shopApi';
+import { ErrorOutline } from '@mui/icons-material';
 
 type FormData = {
   email: string;
@@ -17,7 +28,22 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onLoginUser = (data: FormData) => {};
+  const [showError, setShowError] = useState(false);
+
+  const onLoginUser = async ({ email, password }: FormData) => {
+    setShowError(false);
+    try {
+      const { data } = await shopApi.post('/user/login', { email, password });
+      const { token, user } = data;
+      console.log({ token, user });
+    } catch (error) {
+      console.log('Credentials error');
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+    }
+  };
 
   return (
     <AuthLayout title='Login'>
@@ -28,6 +54,13 @@ const LoginPage = () => {
               <Typography variant='h1' component='h1'>
                 Login
               </Typography>
+              <Chip
+                label='Username / password not recognized'
+                color='error'
+                icon={<ErrorOutline />}
+                className='fadeIn'
+                sx={{ display: showError ? 'flex' : 'none' }}
+              />
             </Grid>
             <Grid item xs={12}>
               <TextField

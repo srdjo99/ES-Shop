@@ -3,6 +3,7 @@ import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 
 import { AuthLayout } from '../../components/layout';
+import { validations } from '../../utils';
 
 type FormData = {
   email: string;
@@ -36,6 +37,7 @@ const LoginPage = () => {
                 fullWidth
                 {...register('email', {
                   required: 'This field is required',
+                  validate: (value) => validations.isEmail(value),
                 })}
                 error={!!errors.email}
                 helperText={errors.email?.message}

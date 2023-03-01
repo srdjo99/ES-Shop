@@ -3,7 +3,8 @@ import { IUser } from '../../interfaces';
 
 type AuthActionType =
   | { type: '[Auth] - Login'; payload: IUser }
-  | { type: '[Auth] - Logout' };
+  | { type: '[Auth] - Logout' }
+  | { type: '[Auth] - Register'; payload: IUser };
 
 export const authReducer = (
   state: AuthState,

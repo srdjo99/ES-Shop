@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
 import {
@@ -12,9 +13,9 @@ import {
 } from '@mui/material';
 import { ErrorOutline } from '@mui/icons-material';
 
+import { AuthContext } from '../../context';
 import { AuthLayout } from '../../components/layout';
 import { validations } from '../../utils';
-import { shopApi } from '../../api';
 
 type FormData = {
   name: string;
@@ -23,30 +24,43 @@ type FormData = {
 };
 
 const RegisterPage = () => {
+  const router = useRouter();
+  const { registerUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const onRegisterForm = async ({ name, email, password }: FormData) => {
     setShowError(false);
 
-    try {
-      const { data } = await shopApi.post('/user/register', {
-        name,
-        email,
-        password,
-      });
-      const { token, user } = data;
-    } catch (error) {
-      console.log('Wrong credentials');
+    const { hasError, message } = await registerUser(name, email, password);
+    if (hasError) {
       setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 3000);
+      setErrorMessage(message!);
+      setTimeout(() => setShowError(false), 3000);
+      return;
     }
+
+    router.replace('/');
+
+    // try {
+    //   const { data } = await shopApi.post('/user/register', {
+    //     name,
+    //     email,
+    //     password,
+    //   });
+    //   const { token, user } = data;
+    // } catch (error) {
+    //   console.log('Wrong credentials');
+    //   setShowError(true);
+    //   setTimeout(() => {
+    //     setShowError(false);
+    //   }, 3000);
+    // }
   };
 
   return (

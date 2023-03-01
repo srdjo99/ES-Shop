@@ -1,4 +1,4 @@
-import { FC, useReducer, ReactNode } from 'react';
+import { FC, useReducer, ReactNode, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -18,6 +18,21 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+
+  useEffect(() => {
+    checkToken();
+  }, []);
+
+  const checkToken = async () => {
+    try {
+      const { data } = await shopApi('/user/validate-token');
+      const { token, user } = data;
+      Cookies.set('token', token);
+      dispatch({ type: '[Auth] - Login', payload: user });
+    } catch (error) {
+      Cookies.remove('token');
+    }
+  };
 
   const loginUser = async (
     email: string,

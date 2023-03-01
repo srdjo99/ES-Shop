@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -12,9 +13,9 @@ import {
 } from '@mui/material';
 import { ErrorOutline } from '@mui/icons-material';
 
+import { AuthContext } from '../../context';
 import { validations } from '../../utils';
 import { AuthLayout } from '../../components/layout';
-import { shopApi } from '../../api';
 
 type FormData = {
   email: string;
@@ -22,6 +23,8 @@ type FormData = {
 };
 
 const LoginPage = () => {
+  const router = useRouter();
+  const { loginUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -32,17 +35,16 @@ const LoginPage = () => {
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
-    try {
-      const { data } = await shopApi.post('/user/login', { email, password });
-      const { token, user } = data;
-      console.log({ token, user });
-    } catch (error) {
-      console.log('Wrong credentials');
+
+    const isValidLogin = await loginUser(email, password);
+
+    if (!isValidLogin) {
       setShowError(true);
-      setTimeout(() => {
-        setShowError(false);
-      }, 3000);
+      setTimeout(() => setShowError(false), 3000);
+      return;
     }
+
+    router.replace('/');
   };
 
   return (

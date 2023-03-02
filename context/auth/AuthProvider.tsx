@@ -1,4 +1,5 @@
 import { FC, useReducer, ReactNode, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -18,6 +19,7 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const router = useRouter();
 
   useEffect(() => {
     checkToken();
@@ -84,8 +86,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const logout = () => {
+    Cookies.remove('token');
+    Cookies.remove('cart');
+    router.reload();
+  };
+
   return (
-    <AuthContext.Provider value={{ ...state, loginUser, registerUser }}>
+    <AuthContext.Provider value={{ ...state, loginUser, registerUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

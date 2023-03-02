@@ -30,6 +30,7 @@ export const cartReducer = (
     case '[Cart] - LoadCart from cookies | storage':
       return {
         ...state,
+        isLoaded: true,
         // not destructuring - always new product
         cart: action.payload,
       };

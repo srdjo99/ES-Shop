@@ -1,0 +1,21 @@
+// import { NextResponse } from 'next/server';
+// import type { NextRequest } from 'next/server';
+// import { jwt } from './utils';
+
+// export async function middleware(req: NextRequest) {
+//   const { token = '' } = req.cookies;
+
+//   try {
+//     await jwt.isValidToken(token);
+//     return NextResponse.next();
+//   } catch (error) {
+//     return NextResponse.redirect(
+//       new URL(`http://localhost:3000/auth/login?p=${req.page.name}`)
+//     );
+//   }
+// }
+
+// export const config = {
+//   matcher: '/checkout/:path*',
+// };
+export {};

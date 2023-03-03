@@ -1,20 +1,18 @@
-import jwt from 'jsonwebtoken';
+import { SignJWT, jwtVerify } from 'jose';
 
-export const signToken = (_id: string, email: string) => {
+export const signToken = async (_id: string, email: string) => {
   if (!process.env.JWT_SECRET_SEED) {
     throw new Error('There is no JWT - check environment variables');
   }
 
-  return jwt.sign(
-    {
-      _id,
-      email,
-    },
-    process.env.JWT_SECRET_SEED,
-    {
-      expiresIn: '30d',
-    }
-  );
+  const iat = Math.floor(Date.now() / 1000);
+  const exp = iat + 60 * 60 * 24;
+
+  return await new SignJWT({ _id, email })
+    .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+    .setIssuedAt(iat)
+    .setExpirationTime(exp)
+    .sign(new TextEncoder().encode(process.env.JWT_SECRET_SEED));
 };
 
 export const isValidToken = (token: string): Promise<string> => {
@@ -23,16 +21,8 @@ export const isValidToken = (token: string): Promise<string> => {
   }
 
   return new Promise((resolve, reject) => {
-    try {
-      jwt.verify(token, process.env.JWT_SECRET_SEED || '', (err, payload) => {
-        if (err) return reject('JWT is not valid');
-
-        const { _id } = payload as { _id: string };
-
-        resolve(_id);
-      });
-    } catch (error) {
-      reject('JWT is not valid');
-    }
+    jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET_SEED))
+      .then(({ payload }) => resolve(payload._id as string))
+      .catch((error) => reject('JWT is not valid, error:' + error));
   });
 };

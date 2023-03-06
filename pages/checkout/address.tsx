@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import {
   Box,
   Button,
@@ -11,6 +12,7 @@ import {
 } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useForm } from 'react-hook-form';
+
 import { ShopLayout } from '../../components/layout';
 import { countries } from '../../utils';
 
@@ -26,6 +28,7 @@ type FormData = {
 };
 
 const AddressPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -45,6 +48,16 @@ const AddressPage = () => {
 
   const onSubmitAddress = (data: FormData) => {
     console.log(data);
+    Cookies.set('firstName', data.firstName);
+    Cookies.set('lastName', data.lastName);
+    Cookies.set('address', data.address);
+    Cookies.set('address2', data.address2 || '');
+    Cookies.set('zip', data.zip);
+    Cookies.set('city', data.city);
+    Cookies.set('country', data.country);
+    Cookies.set('phone', data.phone);
+
+    router.push('/checkout/summary');
   };
 
   return (

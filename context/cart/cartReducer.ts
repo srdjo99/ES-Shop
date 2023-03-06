@@ -13,6 +13,7 @@ type CartActionType =
   | { type: '[Cart] - Change cart quantity'; payload: ICartProduct }
   | { type: '[Cart] - Remove product from cart'; payload: ICartProduct }
   | { type: '[Cart] - Load Address from Cookies'; payload: ShippingAddress }
+  | { type: '[Cart] - Update Address'; payload: ShippingAddress }
   | {
       type: '[Cart] - Update order summary';
       payload: {

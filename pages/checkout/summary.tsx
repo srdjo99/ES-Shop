@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import NextLink from 'next/link';
 import {
   Box,
@@ -10,10 +11,28 @@ import {
   Typography,
 } from '@mui/material';
 
-import { CartList, OrderSummary } from '../../components/cart';
+import { CartContext } from '../../context';
 import { ShopLayout } from '../../components/layout';
+import { CartList, OrderSummary } from '../../components/cart';
+import { countries } from '../../utils';
 
 const SummaryPage = () => {
+  const { shippingAddress, numberOfItems } = useContext(CartContext);
+
+  if (!shippingAddress) {
+    return <></>;
+  }
+
+  const {
+    firstName,
+    lastName,
+    address,
+    address2 = '',
+    city,
+    country,
+    zip,
+    phone,
+  } = shippingAddress;
   return (
     <ShopLayout title='Order summary' pageDescription='Order summary'>
       <Typography variant='h1' component='h1'>
@@ -27,7 +46,10 @@ const SummaryPage = () => {
         <Grid item xs={12} sm={5}>
           <Card className='summary-card'>
             <CardContent>
-              <Typography variant='h2'>Summary (3 products)</Typography>
+              <Typography variant='h2'>
+                Summary ({numberOfItems}{' '}
+                {numberOfItems === 1 ? 'product' : 'products'})
+              </Typography>
               <Divider sx={{ my: 1 }} />
 
               <Box display='flex' justifyContent='space-between'>
@@ -37,11 +59,18 @@ const SummaryPage = () => {
                 </NextLink>
               </Box>
 
-              <Typography>Srdjan Coralic</Typography>
-              <Typography>Svetosavska bb</Typography>
-              <Typography>Laktasi, 78252</Typography>
-              <Typography>BiH</Typography>
-              <Typography>+387 12 123 123</Typography>
+              <Typography>{firstName + lastName}</Typography>
+              <Typography>
+                {address}
+                {address2 ? `, ${address2}` : ''}
+              </Typography>
+              <Typography>
+                {city}, {zip}
+              </Typography>
+              <Typography>
+                {countries.find((c) => c.code === country)?.name}
+              </Typography>
+              <Typography>{phone}</Typography>
 
               <Divider sx={{ my: 1 }} />
 

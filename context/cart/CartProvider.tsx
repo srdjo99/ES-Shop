@@ -149,7 +149,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     Cookies.set('city', address.city);
     Cookies.set('country', address.country);
     Cookies.set('phone', address.phone);
-    dispatch({ type: '[Cart] - Update Address', payload: address });
+    dispatch({ type: '[Cart] - Load Address from Cookies', payload: address });
   };
 
   return (

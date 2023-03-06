@@ -4,9 +4,7 @@ import type { NextRequest } from 'next/server';
 import { jwt } from './utils';
 
 export async function middleware(req: NextRequest) {
-  const token: string = (await req.cookies.get('token')) || '';
-  console.log(token, 'token');
-
+  const token: string = req.cookies.get('token') || '';
   try {
     await jwt.isValidToken(token);
     return NextResponse.next();

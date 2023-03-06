@@ -8,11 +8,14 @@ export const signToken = async (_id: string, email: string) => {
   const iat = Math.floor(Date.now() / 1000);
   const exp = iat + 60 * 60 * 24;
 
+  const alg = 'HS256';
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET_SEED);
+
   return await new SignJWT({ _id, email })
-    .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-    .setIssuedAt(iat)
-    .setExpirationTime(exp)
-    .sign(new TextEncoder().encode(process.env.JWT_SECRET_SEED));
+    .setProtectedHeader({ alg })
+    .setIssuedAt()
+    .setExpirationTime('24h')
+    .sign(secret);
 };
 
 export const isValidToken = (token: string): Promise<string> => {
@@ -21,8 +24,13 @@ export const isValidToken = (token: string): Promise<string> => {
   }
 
   return new Promise((resolve, reject) => {
-    jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET_SEED))
-      .then(({ payload }) => resolve(payload._id as string))
+    jwtVerify(
+      token || '',
+      new TextEncoder().encode(process.env.JWT_SECRET_SEED)
+    )
+      .then(({ payload }) => {
+        resolve(payload._id as string);
+      })
       .catch((error) => reject('JWT is not valid, error:' + error));
   });
 };

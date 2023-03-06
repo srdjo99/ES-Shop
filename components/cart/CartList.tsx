@@ -32,7 +32,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 
   return (
     <>
-      {cart.map((product) => (
+      {cart?.map((product) => (
         <Grid
           container
           spacing={2}

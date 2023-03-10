@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -15,6 +16,7 @@ import { ShopLayout } from '../../components/layout';
 import { countries } from '../../utils';
 import { useContext } from 'react';
 import { CartContext } from '../../context';
+import { CartProvider } from '../../context/cart/CartProvider';
 
 type FormData = {
   firstName: string;
@@ -47,9 +49,23 @@ const AddressPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
-    defaultValues: getAddressFromCookies(),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      address: '',
+      address2: '',
+      zip: '',
+      city: '',
+      country: countries[0].code,
+      phone: '',
+    },
   });
+
+  useEffect(() => {
+    reset(getAddressFromCookies);
+  }, [reset]);
 
   const onSubmitAddress = (data: FormData) => {
     updateAddress(data);
@@ -137,25 +153,16 @@ const AddressPage = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <TextField
-                select
-                variant='filled'
-                label='Country'
-                defaultValue={Cookies.get('country') || countries[0].code}
-                {...register('country', {
-                  required: 'This field is required',
-                })}
-                error={!!errors.country}
-                // helperText={errors.country?.message}
-              >
-                {countries.map((country) => (
-                  <MenuItem key={country.code} value={country.code}>
-                    {country.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </FormControl>
+            <TextField
+              variant='filled'
+              label='Country'
+              fullWidth
+              {...register('country', {
+                required: 'This field is required',
+              })}
+              error={!!errors.country}
+              helperText={errors.country?.message}
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField

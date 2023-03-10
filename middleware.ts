@@ -1,17 +1,24 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 
-import { jwt } from './utils';
+import { getToken } from 'next-auth/jwt';
 
-export async function middleware(req: NextRequest) {
-  const token: string = req.cookies.get('token') || '';
-  try {
-    await jwt.isValidToken(token);
+export async function middleware(request: any) {
+  const requestedPage = request.nextUrl.pathname;
+
+  if (request.nextUrl.pathname.startsWith('/checkout/address')) {
+    const session = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+      raw: true,
+    });
+
+    if (!session) {
+      return NextResponse.redirect(
+        new URL(`/auth/login?p=${requestedPage}`, request.url)
+      );
+    }
+
     return NextResponse.next();
-  } catch (error) {
-    const origin = req.nextUrl.origin;
-    const param = req.url.replace(origin, '');
-    return NextResponse.redirect(new URL(`/auth/login?p=${param}`, origin));
   }
 }
 

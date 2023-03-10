@@ -20,15 +20,15 @@ export default NextAuth({
         },
       },
       async authorize(credentials) {
-        return await dbUsers.checkUserEmailPassword(
+        return (await dbUsers.checkUserEmailPassword(
           credentials!.email,
           credentials!.password
-        );
+        )) as any;
       },
     }),
     GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId: String(process.env.GITHUB_ID),
+      clientSecret: String(process.env.GITHUB_SECRET),
     }),
   ],
 
@@ -64,7 +64,7 @@ export default NextAuth({
 
       return token;
     },
-    async session({ session, token, user }) {
+    async session({ session, token, user }: any) {
       session.accessToken = token.accessToken;
       session.user = token.user as any;
       return session;

@@ -23,9 +23,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         <meta name='og:description' content={pageDescription} />
         {imageFullUrl && <meta name='og:image' content={imageFullUrl} />}
       </Head>
-      <nav>
+      <div>
         <Navbar />
-      </nav>
+      </div>
       <SideMenu />
 
       <main

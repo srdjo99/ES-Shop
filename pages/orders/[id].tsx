@@ -50,9 +50,15 @@ const OrderPage = () => {
 
               <Box display='flex' justifyContent='space-between'>
                 <Typography variant='subtitle1'>Delivery address</Typography>
-                <NextLink href='/checkout/address' passHref>
-                  <Link underline='always'>Edit</Link>
-                </NextLink>
+                {/* <NextLink href='/checkout/address' passHref> */}
+                <Link
+                  href='/checkout/address'
+                  component={NextLink}
+                  underline='always'
+                >
+                  Edit
+                </Link>
+                {/* </NextLink> */}
               </Box>
 
               <Typography>Srdjan Coralic</Typography>
@@ -64,9 +70,11 @@ const OrderPage = () => {
               <Divider sx={{ my: 1 }} />
 
               <Box display='flex' justifyContent='end'>
-                <NextLink href='/cart' passHref>
-                  <Link underline='always'>Edit</Link>
-                </NextLink>
+                {/* <NextLink href='/cart' passHref> */}
+                <Link href='/cart' component={NextLink} underline='always'>
+                  Edit
+                </Link>
+                {/* </NextLink> */}
               </Box>
 
               <OrderSummary />

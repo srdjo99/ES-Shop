@@ -1,9 +1,9 @@
 import { FC, useEffect, useReducer, ReactNode } from 'react';
-import Cookie from 'js-cookie';
+import Cookies from 'js-cookie';
 
 import { ICartProduct, ShippingAddress } from '../../interfaces';
-import { cartReducer, CartContext } from '.';
-import Cookies from 'js-cookie';
+import { cartReducer, CartContext } from './';
+import { shopApi } from '../../api';
 
 export interface CartState {
   isLoaded: boolean;
@@ -30,8 +30,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     try {
-      const cookieProducts = Cookie.get('cart')
-        ? JSON.parse(Cookie.get('cart')!)
+      const cookieProducts = Cookies.get('cart')
+        ? JSON.parse(Cookies.get('cart')!)
         : [];
       dispatch({
         type: '[Cart] - LoadCart from cookies | storage',
@@ -66,7 +66,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    Cookie.set('cart', JSON.stringify(state.cart));
+    Cookies.set('cart', JSON.stringify(state.cart));
   }, [state.cart]);
 
   useEffect(() => {
@@ -141,6 +141,14 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     dispatch({ type: '[Cart] - Load Address from Cookies', payload: address });
   };
 
+  const createOrder = async () => {
+    try {
+      const { data } = await shopApi.post('/orders', {});
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -149,6 +157,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
         updateCartQuantity,
         removeCartProduct,
         updateAddress,
+        createOrder,
       }}
     >
       {children}

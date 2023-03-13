@@ -16,7 +16,6 @@ import { ShopLayout } from '../../components/layout';
 import { countries } from '../../utils';
 import { useContext } from 'react';
 import { CartContext } from '../../context';
-import { CartProvider } from '../../context/cart/CartProvider';
 
 type FormData = {
   firstName: string;

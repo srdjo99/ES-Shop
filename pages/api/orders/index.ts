@@ -61,7 +61,7 @@ const createOrder = async (req: any, res: any) => {
     const userId = session.user._id;
     const newOrder = new Order({ ...req.body, isPaid: false, user: userId });
     await newOrder.save();
-
+    await db.disconnect();
     return res.status(201).json(newOrder);
   } catch (error: any) {
     await db.disconnect();

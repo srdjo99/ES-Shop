@@ -1,5 +1,6 @@
 import { FC, useEffect, useReducer, ReactNode } from 'react';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import { ICartProduct, IOrder, ShippingAddress } from '../../interfaces';
 import { cartReducer, CartContext } from './';
@@ -126,7 +127,10 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     dispatch({ type: '[Cart] - Load Address from Cookies', payload: address });
   };
 
-  const createOrder = async () => {
+  const createOrder = async (): Promise<{
+    hasError: boolean;
+    message: string;
+  }> => {
     if (!state.shippingAddress) {
       throw new Error('No delivery address');
     }
@@ -145,10 +149,23 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     try {
-      const { data } = await shopApi.post('/orders', body);
-      console.log(data);
+      const { data } = await shopApi.post<IOrder>('/orders', body);
+
+      return {
+        hasError: false,
+        message: data._id!,
+      };
     } catch (error) {
-      console.log(error, 'create order error');
+      if (axios.isAxiosError(error)) {
+        return {
+          hasError: true,
+          message: error.response?.data.message,
+        };
+      }
+      return {
+        hasError: true,
+        message: 'Unknown error',
+      };
     }
   };
 

@@ -32,9 +32,17 @@ const SummaryPage = () => {
     }
   }, [router]);
 
-  const onCreateOrder = () => {
+  const onCreateOrder = async () => {
     setIsPosting(true);
-    createOrder();
+    const { hasError, message } = await createOrder();
+
+    if (hasError) {
+      setIsPosting(false);
+      setErrorMessage(message);
+      return;
+    }
+
+    router.replace(`/orders/${message}`);
   };
 
   if (!shippingAddress) {

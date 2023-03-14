@@ -151,6 +151,8 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     try {
       const { data } = await shopApi.post<IOrder>('/orders', body);
 
+      dispatch({ type: '[Cart] - Order complete' });
+
       return {
         hasError: false,
         message: data._id!,

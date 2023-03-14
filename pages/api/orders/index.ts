@@ -8,5 +8,16 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  return res.status(200).json({ message: 'eg' });
+  switch (req.method) {
+    case 'POST':
+      createOrder(req, res);
+    default:
+      return res.status(400).json({ message: 'Bad Request' });
+  }
 }
+
+const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const body = req.body;
+
+  return res.status(201).json({ body });
+};

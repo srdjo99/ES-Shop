@@ -1,7 +1,7 @@
 import { FC, useEffect, useReducer, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 
-import { ICartProduct, ShippingAddress } from '../../interfaces';
+import { ICartProduct, IOrder, ShippingAddress } from '../../interfaces';
 import { cartReducer, CartContext } from './';
 import { shopApi } from '../../api';
 
@@ -126,13 +126,31 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     dispatch({ type: '[Cart] - Load Address from Cookies', payload: address });
   };
 
-  // const createOrder = async () => {
-  //   try {
-  //     const { data } = await shopApi.post('/orders', {});
-  //   } catch (error) {
-  //     console.log(error, 'create order error');
-  //   }
-  // };
+  const createOrder = async () => {
+    if (!state.shippingAddress) {
+      throw new Error('No delivery address');
+    }
+
+    const body: IOrder = {
+      orderItems: state.cart.map((product) => ({
+        ...product,
+        size: product.size!,
+      })),
+      shippingAddress: state.shippingAddress,
+      numberOfItems: state.numberOfItems,
+      subTotal: state.subTotal,
+      tax: state.tax,
+      total: state.total,
+      isPaid: false,
+    };
+
+    try {
+      const { data } = await shopApi.post('/orders', body);
+      console.log(data);
+    } catch (error) {
+      console.log(error, 'create order error');
+    }
+  };
 
   return (
     <CartContext.Provider
@@ -142,7 +160,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
         updateCartQuantity,
         removeCartProduct,
         updateAddress,
-        // createOrder,
+        createOrder,
       }}
     >
       {children}

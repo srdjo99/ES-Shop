@@ -3,11 +3,13 @@ import { getSession } from 'next-auth/react';
 
 import { db } from '../../../database';
 import { IOrder } from '../../../interfaces';
-import { Product } from '../../../models';
+import { Product, Order } from '../../../models';
 
-type Data = {
-  message: string;
-};
+type Data =
+  | {
+      message: string;
+    }
+  | IOrder;
 
 export default function handler(
   req: NextApiRequest,
@@ -39,7 +41,7 @@ const createOrder = async (req: any, res: any) => {
     const subTotal = orderItems.reduce((prev, current) => {
       // validation with db
       const currentPrice = dbProducts.find(
-        (prod) => prod._id === current._id
+        (prod) => prod.id === current._id
       )?.price;
 
       if (!currentPrice) {
@@ -48,9 +50,22 @@ const createOrder = async (req: any, res: any) => {
 
       return current.price * current.quantity + prev;
     }, 0);
-  } catch (error) {}
 
-  console.log({ dbProducts });
+    const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0);
+    const backendTotal = subTotal * (taxRate + 1);
 
-  return res.status(200).json(req.body);
+    if (total !== backendTotal) {
+      throw new Error('The total does not match the amount');
+    }
+
+    const userId = session.user._id;
+    const newOrder = new Order({ ...req.body, isPaid: false, user: userId });
+    await newOrder.save();
+
+    return res.status(201).json(newOrder);
+  } catch (error: any) {
+    await db.disconnect();
+    console.log(error);
+    res.status(400).json({ message: error.message || '' });
+  }
 };

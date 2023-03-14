@@ -19,8 +19,7 @@ import { CartList, OrderSummary } from '../../components/cart';
 
 const SummaryPage = () => {
   const router = useRouter();
-  const { shippingAddress, numberOfItems, createOrder } =
-    useContext(CartContext);
+  const { shippingAddress, numberOfItems } = useContext(CartContext);
 
   useEffect(() => {
     if (!Cookies.get('firstName')) {
@@ -28,9 +27,9 @@ const SummaryPage = () => {
     }
   }, [router]);
 
-  const onCreateOrder = () => {
-    createOrder();
-  };
+  // const onCreateOrder = () => {
+  //   createOrder();
+  // };
 
   if (!shippingAddress) {
     return <></>;
@@ -98,12 +97,7 @@ const SummaryPage = () => {
               <OrderSummary />
 
               <Box sx={{ mt: 3 }}>
-                <Button
-                  color='secondary'
-                  className='circular-btn'
-                  fullWidth
-                  onClick={onCreateOrder}
-                >
+                <Button color='secondary' className='circular-btn' fullWidth>
                   Confirm order
                 </Button>
               </Box>

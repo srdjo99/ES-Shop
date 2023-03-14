@@ -17,7 +17,7 @@ export interface CartState {
 
 const CART_INITIAL_STATE: CartState = {
   isLoaded: false,
-  cart: [],
+  cart: Cookies.get('cart') ? JSON.parse(Cookies.get('cart')!) : [],
   numberOfItems: 0,
   subTotal: 0,
   tax: 0,
@@ -27,23 +27,6 @@ const CART_INITIAL_STATE: CartState = {
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
-
-  useEffect(() => {
-    try {
-      const cookieProducts = Cookies.get('cart')
-        ? JSON.parse(Cookies.get('cart')!)
-        : [];
-      dispatch({
-        type: '[Cart] - LoadCart from cookies | storage',
-        payload: cookieProducts,
-      });
-    } catch (error) {
-      dispatch({
-        type: '[Cart] - LoadCart from cookies | storage',
-        payload: [],
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (Cookies.get('firstName')) {
@@ -66,7 +49,9 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    Cookies.set('cart', JSON.stringify(state.cart));
+    if (state.cart.length > 0) {
+      Cookies.set('cart', JSON.stringify(state.cart));
+    }
   }, [state.cart]);
 
   useEffect(() => {
@@ -141,13 +126,13 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     dispatch({ type: '[Cart] - Load Address from Cookies', payload: address });
   };
 
-  const createOrder = async () => {
-    try {
-      const { data } = await shopApi.post('/orders', {});
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const createOrder = async () => {
+  //   try {
+  //     const { data } = await shopApi.post('/orders', {});
+  //   } catch (error) {
+  //     console.log(error, 'create order error');
+  //   }
+  // };
 
   return (
     <CartContext.Provider
@@ -157,7 +142,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
         updateCartQuantity,
         removeCartProduct,
         updateAddress,
-        createOrder,
+        // createOrder,
       }}
     >
       {children}

@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { dbUsers } from '../../../database';
 
-export default NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
     Credentials({
       name: 'Custom Login',
@@ -70,4 +70,6 @@ export default NextAuth({
       return session;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

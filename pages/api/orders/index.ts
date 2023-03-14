@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
 type Data = {
   message: string;
@@ -10,14 +11,16 @@ export default function handler(
 ) {
   switch (req.method) {
     case 'POST':
-      createOrder(req, res);
+      return createOrder(req, res);
     default:
       return res.status(400).json({ message: 'Bad Request' });
   }
 }
 
-const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const body = req.body;
+const createOrder = async (req: any, res: any) => {
+  // const { orderItems, total } = req.body as IOrder;
 
-  return res.status(201).json({ body });
+  const session: any = await getSession({ req });
+
+  return res.status(200).json(session);
 };

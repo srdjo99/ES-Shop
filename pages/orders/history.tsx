@@ -33,7 +33,7 @@ const columns: GridColDef[] = [
     renderCell: (params) => {
       return (
         <Link
-          href={`/orders/${params.row.id}`}
+          href={`/orders/${params.row.orderId}`}
           component={NextLink}
           underline='always'
         >
@@ -44,13 +44,23 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [{ id: 1, paid: true, fullname: 'Srdjan Coralic' }];
-
 interface Props {
   orders: IOrder[];
 }
 
 const HistoryPage: NextPage<Props> = ({ orders }) => {
+  console.log({ orders });
+
+  const rows = orders.map((order, i) => ({
+    id: i + 1,
+    paid: order.isPaid,
+    fullname:
+      order.shippingAddress.firstName + ' ' + order.shippingAddress.lastName,
+    orderId: order._id,
+  }));
+
+  console.log(rows);
+
   return (
     <ShopLayout
       title='History of orders'
@@ -75,7 +85,7 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const session: any = await getSession();
+  const session: any = await getSession({ req });
 
   if (!session) {
     return {

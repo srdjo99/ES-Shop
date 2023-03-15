@@ -49,8 +49,6 @@ interface Props {
 }
 
 const HistoryPage: NextPage<Props> = ({ orders }) => {
-  console.log({ orders });
-
   const rows = orders.map((order, i) => ({
     id: i + 1,
     paid: order.isPaid,
@@ -70,7 +68,7 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
         History of orders
       </Typography>
 
-      <Grid container>
+      <Grid container className='fadeIn'>
         <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
           <DataGrid
             rows={rows}

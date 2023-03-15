@@ -26,10 +26,17 @@ interface Props {
 const OrderPage: NextPage<Props> = ({ order }) => {
   const { shippingAddress } = order;
 
+  const summaryValues = {
+    tax: order.tax,
+    total: order.total,
+    subTotal: order.subTotal,
+    numberOfItems: order.numberOfItems,
+  };
+
   return (
     <ShopLayout title='Order summary' pageDescription='Order summary'>
       <Typography variant='h1' component='h1'>
-        {order._id}
+        Order: {order._id}
       </Typography>
       {order.isPaid ? (
         <Chip
@@ -51,7 +58,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
       <Grid container>
         <Grid item xs={12} sm={7}>
-          <CartList />
+          <CartList products={order.orderItems} />
         </Grid>
         <Grid item xs={12} sm={5}>
           <Card className='summary-card'>
@@ -90,17 +97,20 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
               <Divider sx={{ my: 1 }} />
 
-              <OrderSummary />
+              <OrderSummary summaryValues={summaryValues} />
 
-              <Box sx={{ mt: 3 }}>
-                <h1>Pay</h1>
-                <Chip
-                  sx={{ my: 2 }}
-                  label='Order has already been paid'
-                  variant='outlined'
-                  color='success'
-                  icon={<CreditScoreOutlined />}
-                />
+              <Box sx={{ mt: 3 }} display='flex' flexDirection='column'>
+                {order.isPaid ? (
+                  <Chip
+                    sx={{ my: 2 }}
+                    label='Order has already been paid'
+                    variant='outlined'
+                    color='success'
+                    icon={<CreditScoreOutlined />}
+                  />
+                ) : (
+                  <h1>Pay</h1>
+                )}
               </Box>
             </CardContent>
           </Card>

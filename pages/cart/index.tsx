@@ -25,7 +25,7 @@ const CartPage = () => {
   }, [isLoaded, cart, router]);
 
   return (
-    <ShopLayout title='Cart - 3' pageDescription='Store shopping cart'>
+    <ShopLayout title='Cart' pageDescription='Store shopping cart'>
       <Typography variant='h1' component='h1'>
         Cart
       </Typography>

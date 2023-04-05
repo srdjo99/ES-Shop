@@ -86,7 +86,8 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       .json({ message: 'Order does NOT exist in our database' });
   }
 
-  if (dbOrder.total !== +data.purchase_units[0].amount.value) {
+  if (dbOrder.total !== Number(data.purchase_units[0].amount.value)) {
+    console.log(dbOrder.total, data.purchase_units[0].amount.value);
     await db.disconnect();
     return res
       .status(400)
@@ -95,6 +96,7 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   dbOrder.transactionId = transactionId;
   dbOrder.isPaid = true;
+  await dbOrder.save();
 
   await db.disconnect();
 

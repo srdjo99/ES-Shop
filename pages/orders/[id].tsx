@@ -3,7 +3,6 @@ import NextLink from 'next/link';
 import { getSession } from 'next-auth/react';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Chip,
@@ -13,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { CreditCardOutlined, CreditScoreOutlined } from '@mui/icons-material';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 
 import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layout';
@@ -71,11 +71,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
               <Box display='flex' justifyContent='space-between'>
                 <Typography variant='subtitle1'>Delivery address</Typography>
-                <Link
-                  href='/checkout/address'
-                  component={NextLink}
-                  underline='always'
-                >
+                <Link href='/checkout/address' underline='always'>
                   Edit
                 </Link>
               </Box>
@@ -109,7 +105,26 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                     icon={<CreditScoreOutlined />}
                   />
                 ) : (
-                  <h1>Pay</h1>
+                  <PayPalButtons
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [
+                          {
+                            amount: {
+                              value: `${order.total}`,
+                            },
+                          },
+                        ],
+                      });
+                    }}
+                    onApprove={(data, actions) => {
+                      return actions.order!.capture().then((details) => {
+                        console.log({ details });
+                        const name = details.payer.name!.given_name;
+                        alert(`Transaction completed by ${name}`);
+                      });
+                    }}
+                  />
                 )}
               </Box>
             </CardContent>

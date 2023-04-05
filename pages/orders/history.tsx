@@ -32,11 +32,7 @@ const columns: GridColDef[] = [
     sortable: false,
     renderCell: (params) => {
       return (
-        <Link
-          href={`/orders/${params.row.orderId}`}
-          component={NextLink}
-          underline='always'
-        >
+        <Link href={`/orders/${params.row.orderId}`} underline='always'>
           See order
         </Link>
       );

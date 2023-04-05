@@ -1,3 +1,4 @@
+'use client';
 import { FC, useContext } from 'react';
 import NextLink from 'next/link';
 import {
@@ -44,7 +45,7 @@ export const CartList: FC<Props> = ({ editable = false, products }) => {
           sx={{ mb: 1 }}
         >
           <Grid item xs={3}>
-            <Link href={`/product/${product.slug}`} component={NextLink}>
+            <Link href={`/product/${product.slug}`}>
               <CardActionArea>
                 <CardMedia
                   image={`/products/${product.image}`}

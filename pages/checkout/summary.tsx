@@ -80,11 +80,7 @@ const SummaryPage = () => {
 
               <Box display='flex' justifyContent='space-between'>
                 <Typography variant='subtitle1'>Delivery address</Typography>
-                <Link
-                  underline='always'
-                  href='/checkout/address'
-                  component={NextLink}
-                >
+                <Link underline='always' href='/checkout/address'>
                   Edit
                 </Link>
               </Box>
@@ -103,7 +99,7 @@ const SummaryPage = () => {
               <Divider sx={{ my: 1 }} />
 
               <Box display='flex' justifyContent='end'>
-                <Link href='/cart' component={NextLink} underline='always'>
+                <Link href='/cart' underline='always'>
                   Edit
                 </Link>
               </Box>

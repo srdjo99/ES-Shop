@@ -1,3 +1,4 @@
+'use client';
 import { FC, useEffect, useReducer, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';

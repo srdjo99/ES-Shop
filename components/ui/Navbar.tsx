@@ -41,7 +41,7 @@ export const Navbar = () => {
     <AppBar>
       <Toolbar>
         {/* <NextLink href='/' passHref legacyBehavior> */}
-        <Link href='/' display='flex' alignItems='center' component={NextLink}>
+        <Link href='/' display='flex' alignItems='center'>
           <Typography variant='h6'>ES |</Typography>
           <Typography sx={{ ml: 0.5 }}>Shop</Typography>
         </Link>
@@ -56,7 +56,7 @@ export const Navbar = () => {
           className='fadeIn'
         >
           {/* <NextLink href='/category/men' passHref> */}
-          <Link href='/category/men' component={NextLink}>
+          <Link href='/category/men'>
             <Button color={asPath === '/category/men' ? 'primary' : 'info'}>
               Men
             </Button>
@@ -64,7 +64,7 @@ export const Navbar = () => {
           {/* </NextLink> */}
 
           {/* <NextLink href='/category/women' passHref> */}
-          <Link href='/category/women' component={NextLink}>
+          <Link href='/category/women'>
             <Button color={asPath === '/category/women' ? 'primary' : 'info'}>
               Women
             </Button>
@@ -72,7 +72,7 @@ export const Navbar = () => {
           {/* </NextLink> */}
 
           {/* <NextLink href='/category/kid' passHref> */}
-          <Link href='/category/kid' component={NextLink}>
+          <Link href='/category/kid'>
             <Button color={asPath === '/category/kid' ? 'primary' : 'info'}>
               Kids
             </Button>
@@ -123,7 +123,7 @@ export const Navbar = () => {
         </IconButton>
 
         {/* <NextLink href='/cart' passHref> */}
-        <Link href='/cart' component={NextLink}>
+        <Link href='/cart'>
           <IconButton>
             <Badge
               badgeContent={numberOfItems > 9 ? '+9' : numberOfItems}

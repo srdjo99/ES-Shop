@@ -58,7 +58,6 @@ const OrderPage: NextPage<Props> = ({ order }) => {
       router.reload();
     } catch (error) {
       setIsPaying(false);
-      s;
       console.log(error);
       alert('Error');
     }

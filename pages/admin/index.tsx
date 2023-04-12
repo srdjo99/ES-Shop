@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminLayout } from '../../components/layout';
+import useSWR from 'swr';
 import { Grid } from '@mui/material';
 import {
   AccessTimeOutlined,
@@ -13,8 +13,17 @@ import {
   ProductionQuantityLimitsOutlined,
 } from '@mui/icons-material';
 import { SummaryTile } from '../../components/admin';
+import { AdminLayout } from '../../components/layout';
+import { DashboardSummaryResponse } from '../../interfaces';
 
 const DashboardPage = () => {
+  const { data, error } = useSWR<DashboardSummaryResponse>(
+    '/api/admin/dashboard',
+    {
+      refreshInterval: 30 * 1000,
+    }
+  );
+
   return (
     <AdminLayout
       title='Dashboard'

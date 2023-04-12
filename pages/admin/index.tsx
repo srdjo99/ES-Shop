@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import {
   AccessTimeOutlined,
   AttachMoneyOutlined,
@@ -24,6 +24,36 @@ const DashboardPage = () => {
     }
   );
 
+  const [refreshIn, setRefreshIn] = useState(30);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('tik');
+      setRefreshIn((refreshIn) => (refreshIn > 0 ? refreshIn - 1 : 30));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!error && !data) {
+    return <></>;
+  }
+
+  if (error) {
+    console.log(error);
+    return <Typography>Error while loading information</Typography>;
+  }
+
+  const {
+    numberOfOrders,
+    paidOrders,
+    numberOfClients,
+    numberOfProducts,
+    productsWithNoInventory,
+    lowInventory,
+    notPaidOrders,
+  } = data!;
+
   return (
     <AdminLayout
       title='Dashboard'
@@ -32,39 +62,39 @@ const DashboardPage = () => {
     >
       <Grid container spacing={2}>
         <SummaryTile
-          title={1}
+          title={numberOfOrders}
           subTitle='Total Orders'
           icon={<CreditCardOutlined color='secondary' sx={{ fontSize: 40 }} />}
         />
         <SummaryTile
-          title={2}
+          title={paidOrders}
           subTitle='Paid Orders'
           icon={<AttachMoneyOutlined color='success' sx={{ fontSize: 40 }} />}
         />
         <SummaryTile
-          title={2}
+          title={notPaidOrders}
           subTitle='Pending Orders'
           icon={<CreditCardOffOutlined color='error' sx={{ fontSize: 40 }} />}
         />
         <SummaryTile
-          title={4}
+          title={numberOfClients}
           subTitle='Clients'
           icon={<GroupOutlined color='primary' sx={{ fontSize: 40 }} />}
         />
         <SummaryTile
-          title={5}
+          title={numberOfProducts}
           subTitle='Products'
           icon={<CategoryOutlined color='warning' sx={{ fontSize: 40 }} />}
         />
         <SummaryTile
-          title={6}
+          title={productsWithNoInventory}
           subTitle='Out of Stock'
           icon={
             <CancelPresentationOutlined color='error' sx={{ fontSize: 40 }} />
           }
         />
         <SummaryTile
-          title={7}
+          title={lowInventory}
           subTitle='Low inventory'
           icon={
             <ProductionQuantityLimitsOutlined
@@ -74,7 +104,7 @@ const DashboardPage = () => {
           }
         />
         <SummaryTile
-          title={8}
+          title={refreshIn}
           subTitle='Update in:'
           icon={<AccessTimeOutlined color='secondary' sx={{ fontSize: 40 }} />}
         />

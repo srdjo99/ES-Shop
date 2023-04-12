@@ -8,14 +8,22 @@ export async function middleware(req: NextRequest | any, ev: NextFetchEvent) {
   });
 
   if (!session) {
-    const requestedPage = req.page.name;
-    return NextResponse.redirect(`/auth/login?p=${requestedPage}`);
+    return new Response(JSON.stringify({ message: 'Not authorized' }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   const validRoles = ['admin', 'super-user'];
-
   if (!validRoles.includes(session.user.role)) {
-    return NextResponse.redirect('/');
+    return new Response(JSON.stringify({ message: 'Not authorized' }), {
+      status: 401,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
   }
 
   return NextResponse.next();

@@ -42,7 +42,7 @@ const updateUser = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   const validRoles = ['admin', 'super-user', 'client'];
-  if (validRoles.includes(role)) {
+  if (!validRoles.includes(role)) {
     return res
       .status(400)
       .json({ message: 'Role not allowed' + validRoles.join(', ') });

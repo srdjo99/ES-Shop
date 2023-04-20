@@ -1,6 +1,6 @@
-import { Grid } from '@mui/material';
+import { CardMedia, Grid } from '@mui/material';
 import { CategoryOutlined } from '@mui/icons-material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
 import useSWR from 'swr';
 
@@ -8,7 +8,22 @@ import { AdminLayout } from '../../components/layout';
 import { IProduct } from '../../interfaces';
 
 const columns: GridColDef[] = [
-  { field: 'img', headerName: 'Image' },
+  {
+    field: 'img',
+    headerName: 'Image',
+    renderCell: ({ row }: GridRenderCellParams) => {
+      return (
+        <a href={`/product/${row.slug}`} target='_blank' rel='noreferrer'>
+          <CardMedia
+            component='img'
+            alt={row.title}
+            className='fadeIn'
+            image={`/products/${row.img}`}
+          />
+        </a>
+      );
+    },
+  },
   { field: 'title', headerName: 'Title', width: 250 },
   { field: 'gender', headerName: 'Gender' },
   { field: 'type', headerName: 'Type' },
@@ -30,7 +45,8 @@ const ProductsPage = () => {
     type: product.type,
     inStock: product.inStock,
     price: product.price,
-    sizes: product.sizes,
+    slug: product.slug,
+    sizes: product.sizes.join(', '),
   }));
 
   return (

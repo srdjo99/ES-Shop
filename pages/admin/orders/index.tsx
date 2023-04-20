@@ -4,8 +4,8 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
 import useSWR from 'swr';
 
-import { AdminLayout } from '../../components/layout';
-import { IOrder, IUser } from '../../interfaces';
+import { AdminLayout } from '../../../components/layout';
+import { IOrder, IUser } from '../../../interfaces';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'Order ID', width: 250 },

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import {
   DriveFileRenameOutline,
@@ -64,9 +64,25 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     formState: { errors },
     getValues,
     setValue,
+    watch,
   } = useForm<FormData>({
     defaultValues: product,
   });
+
+  useEffect(() => {
+    watch((value, { name, type }) => {
+      console.log({ value, name, type });
+      if (name === 'title') {
+        const newSlug =
+          value.title
+            ?.trim()
+            .replaceAll(' ', '_')
+            .replaceAll("'", '')
+            .toLowerCase() || '';
+        setValue('slug', newSlug);
+      }
+    });
+  }, [watch, setValue]);
 
   const onChangeSize = (size: string) => {
     const currentSizes = getValues('sizes');

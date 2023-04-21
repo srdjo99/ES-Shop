@@ -40,7 +40,7 @@ const updateProduct = async (
     return res.status(400).json({ message: 'Product ID is not valid' });
   }
 
-  if (images.length <= 2) {
+  if (images.length < 2) {
     return res.status(400).json({ message: 'Minimum 2 images necessary' });
   }
 
@@ -55,7 +55,7 @@ const updateProduct = async (
         .json({ message: 'Product with that ID does not exist' });
     }
 
-    await product.update(req.body);
+    await product.updateOne(req.body);
     await db.disconnect();
 
     return res.status(200).json(product);

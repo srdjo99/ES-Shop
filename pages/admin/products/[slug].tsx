@@ -70,8 +70,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   });
 
   useEffect(() => {
-    watch((value, { name, type }) => {
-      console.log({ value, name, type });
+    const subscription = watch((value, { name, type }) => {
       if (name === 'title') {
         const newSlug =
           value.title
@@ -82,6 +81,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         setValue('slug', newSlug);
       }
     });
+
+    return () => subscription.unsubscribe();
   }, [watch, setValue]);
 
   const onChangeSize = (size: string) => {

@@ -62,6 +62,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
   } = useForm<FormData>({
     defaultValues: product,
   });
@@ -145,7 +147,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             <Divider sx={{ my: 1 }} />
             <FormControl sx={{ mb: 1 }}>
               <FormLabel>Type</FormLabel>
-              <RadioGroup row>
+              <RadioGroup
+                row
+                value={getValues('type')}
+                onChange={(e) =>
+                  setValue('type', e.target.value, { shouldValidate: true })
+                }
+              >
                 {validTypes.map((option) => (
                   <FormControlLabel
                     key={option}
@@ -158,7 +166,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             </FormControl>
             <FormControl sx={{ mb: 1 }}>
               <FormLabel>Gender</FormLabel>
-              <RadioGroup row>
+              <RadioGroup
+                row
+                value={getValues('gender')}
+                onChange={(e) =>
+                  setValue('gender', e.target.value, { shouldValidate: true })
+                }
+              >
                 {validGender.map((option) => (
                   <FormControlLabel
                     key={option}

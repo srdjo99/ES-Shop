@@ -102,7 +102,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('sizes', [...currentSizes, size], { shouldValidate: true });
   };
 
-  const onNewTag = (e: KeyboardEvent) => {
+  const onNewTag = () => {
     const newTag = newTagValue.trim().toLowerCase();
     const currentTags = getValues('tags');
 

@@ -124,10 +124,22 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue('tags', updatedTags, { shouldValidate: true });
   };
 
-  const onFilesSelected = (e: ChangeEvent<HTMLInputElement>) => {
+  const onFilesSelected = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
 
-    console.log(e.target.files);
+    try {
+      for (const file of e.target.files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        const { data } = await shopApi.post<{ message: string }>(
+          '/admin/upload',
+          formData
+        );
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onSubmit = async (form: FormData) => {

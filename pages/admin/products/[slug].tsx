@@ -1,4 +1,4 @@
-import { FC, KeyboardEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import {
@@ -62,6 +62,7 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [newTagValue, setNewTagValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -121,6 +122,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const onDeleteTag = (tag: string) => {
     const updatedTags = getValues('tags').filter((t) => t !== tag);
     setValue('tags', updatedTags, { shouldValidate: true });
+  };
+
+  const onFilesSelected = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+
+    console.log(e.target.files);
   };
 
   const onSubmit = async (form: FormData) => {
@@ -332,9 +339,18 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 fullWidth
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3 }}
+                onClick={() => fileInputRef.current?.click()}
               >
                 Upload image
               </Button>
+              <input
+                ref={fileInputRef}
+                type='file'
+                multiple
+                accept='image/png, image/gif, image/jpeg'
+                style={{ display: 'none' }}
+                onChange={onFilesSelected}
+              />
 
               <Chip
                 label='At least 2 images necessary'

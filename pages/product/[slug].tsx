@@ -30,7 +30,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     slug: product.slug,
     title: product.title,
     gender: product.gender,
-    quantity: 0,
+    quantity: 1,
   });
 
   const selectedSize = (size: ISize) => {
@@ -51,7 +51,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     if (!tempCartProduct.size) return;
 
     addProductToCart(tempCartProduct);
-    // router.push('/cart');
+    router.push('/cart');
   };
 
   return (

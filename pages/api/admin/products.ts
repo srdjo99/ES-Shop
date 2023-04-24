@@ -4,6 +4,9 @@ import { db } from '../../../database';
 import { Product } from '../../../models';
 import { isValidObjectId } from 'mongoose';
 
+import { v2 as cloudinary } from 'cloudinary';
+cloudinary.config(process.env.CLOUDINARY_URL || '');
+
 type Data = { message: string } | IProduct[] | IProduct;
 
 export default function handler(
@@ -46,7 +49,6 @@ const updateProduct = async (
 
   try {
     await db.connect();
-
     const product = await Product.findById(_id);
     if (!product) {
       await db.disconnect();
@@ -54,6 +56,16 @@ const updateProduct = async (
         .status(400)
         .json({ message: 'Product with that ID does not exist' });
     }
+
+    product.images.forEach(async (image) => {
+      if (!images.includes(image)) {
+        const [fileId, extension] = image
+          .substring(image.lastIndexOf('/') + 1)
+          .split('.');
+        console.log({ image, fileId, extension });
+        await cloudinary.uploader.destroy(fileId);
+      }
+    });
 
     await product.updateOne(req.body);
     await db.disconnect();

@@ -22,9 +22,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const productImage = useMemo(() => {
-    return isHovered
-      ? `/products/${product.images[1]}`
-      : `/products/${product.images[0]}`;
+    return isHovered ? product.images[1] : product.images[0];
   }, [isHovered, product.images]);
 
   return (
@@ -37,7 +35,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
     >
       <Card>
         {/* <NextLink href={`/products/${product.slug}`} passHref prefetch={false}> */}
-        <Link href={`/products/${product.slug}`}>
+        <Link href={`/product/${product.slug}`}>
           <CardActionArea>
             {product.inStock === 0 && (
               <Chip

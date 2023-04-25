@@ -150,25 +150,25 @@ const RegisterPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  query,
-}) => {
-  const session = await getSession({ req });
-  const { p = '/' } = query;
+// export const getServerSideProps: GetServerSideProps = async ({
+//   req,
+//   query,
+// }) => {
+//   const session = await getSession({ req });
+//   const { p = '/' } = query;
 
-  if (session) {
-    return {
-      redirect: {
-        destination: p.toString(),
-        permanent: false,
-      },
-    };
-  }
+//   if (session) {
+//     return {
+//       redirect: {
+//         destination: p.toString(),
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {
-    props: {},
-  };
-};
+//   return {
+//     props: {},
+//   };
+// };
 
 export default RegisterPage;

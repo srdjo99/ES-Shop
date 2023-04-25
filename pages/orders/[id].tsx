@@ -20,7 +20,7 @@ import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layout';
 import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces';
-import { shopApi } from '../../api';
+import { shopApi } from '../../shopApi';
 
 export type OrderResponseBody = {
   id: string;

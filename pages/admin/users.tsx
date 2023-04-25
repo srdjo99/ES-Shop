@@ -7,7 +7,7 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
 import { AdminLayout } from '../../components/layout';
 import { IUser } from '../../interfaces';
-import { shopApi } from '../../api';
+import { shopApi } from '../../shopApi';
 
 const UsersPage = () => {
   const { data, error } = useSWR<IUser[]>('/api/admin/users');

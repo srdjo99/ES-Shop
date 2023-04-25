@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import { AuthContext, authReducer } from './';
 import { IUser } from '../../interfaces';
-import { shopApi } from '../../api';
+import { shopApi } from '../../shopApi';
 
 export interface AuthState {
   isLoggedIn: boolean;

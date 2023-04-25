@@ -32,7 +32,7 @@ import { AdminLayout } from '../../../components/layout';
 import { IProduct } from '../../../interfaces';
 import { dbProducts } from '../../../database';
 import { useForm } from 'react-hook-form';
-import { shopApi } from '../../../api';
+import { shopApi } from '../../../shopApi';
 import { Product } from '../../../models';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];

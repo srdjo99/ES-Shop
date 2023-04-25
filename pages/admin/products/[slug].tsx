@@ -25,6 +25,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from '@mui/material';
 
 import { AdminLayout } from '../../../components/layout';
@@ -33,6 +34,7 @@ import { dbProducts } from '../../../database';
 import { useForm } from 'react-hook-form';
 import { shopApi } from '../../../shopApi';
 import { Product } from '../../../models';
+import useSWR from 'swr';
 
 const validTypes = ['shirts', 'pants', 'hoodies', 'hats'];
 const validGender = ['men', 'women', 'kid', 'unisex'];
@@ -59,11 +61,40 @@ interface Props {
   product: IProduct;
 }
 
-const ProductAdminPage: FC<Props> = ({ product }) => {
+let product = {
+  description: '',
+  images: [],
+  inStock: 0,
+  price: 0,
+  sizes: [],
+  tags: [],
+  title: '',
+  type: '',
+  gender: 'women',
+};
+
+const ProductAdminPage: FC<Props> = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newTagValue, setNewTagValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  const { data, error } = useSWR(
+    router.query.slug !== 'new' ? `/api/products/${router.query.slug}` : product
+  );
+
+  if (data) {
+    product = data;
+  }
+
+  if (!error && !data) {
+    return <></>;
+  }
+
+  if (error) {
+    console.log(error);
+    return <Typography>Error while loading information</Typography>;
+  }
 
   const {
     register,
@@ -415,33 +446,34 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { slug = '' } = query;
+// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+//   const { slug = '' } = query;
 
-  let product: IProduct | null;
+//   let product: IProduct | null;
 
-  if (slug === 'new') {
-    const tempProduct = JSON.parse(JSON.stringify(new Product()));
-    delete tempProduct._id;
-    product = tempProduct;
-  } else {
-    product = await dbProducts.getProductBySlug(slug.toString());
-  }
+//   if (slug === 'new') {
+//     const tempProduct = JSON.parse(JSON.stringify(new Product()));
+//     delete tempProduct._id;
+//     console.log(tempProduct, 'tempProduct');
+//     product = tempProduct;
+//   } else {
+//     product = await dbProducts.getProductBySlug(slug.toString());
+//   }
 
-  if (!product) {
-    return {
-      redirect: {
-        destination: '/admin/products',
-        permanent: false,
-      },
-    };
-  }
+//   if (!product) {
+//     return {
+//       redirect: {
+//         destination: '/admin/products',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {
-    props: {
-      product,
-    },
-  };
-};
+//   return {
+//     props: {
+//       product,
+//     },
+//   };
+// };
 
 export default ProductAdminPage;

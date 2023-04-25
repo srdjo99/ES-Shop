@@ -1,11 +1,10 @@
 import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import {
-  DriveFileRenameOutline,
-  SaveOutlined,
-  UploadOutlined,
-} from '@mui/icons-material';
+
+import DriveFileRenameOutline from '@mui/icons-material/DriveFileRenameOutline';
+import SaveOutlined from '@mui/icons-material/SaveOutlined';
+import UploadOutlined from '@mui/icons-material/UploadOutlined';
 import {
   Box,
   Button,

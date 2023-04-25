@@ -7,8 +7,9 @@ export async function middleware(req: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  if (req.nextUrl.pathname.startsWith('/login' || '/register') && session) {
+  if (req.nextUrl.pathname.startsWith('/login') && session) {
     const url = req.nextUrl.clone();
+    console.log(url);
     url.pathname = '/';
     return NextResponse.redirect(url);
   }

@@ -83,19 +83,6 @@ const ProductAdminPage: FC<Props> = () => {
     router.query.slug !== 'new' ? `/api/products/${router.query.slug}` : product
   );
 
-  if (data) {
-    product = data;
-  }
-
-  if (!error && !data) {
-    return <></>;
-  }
-
-  if (error) {
-    console.log(error);
-    return <Typography>Error while loading information</Typography>;
-  }
-
   const {
     register,
     handleSubmit,
@@ -122,6 +109,19 @@ const ProductAdminPage: FC<Props> = () => {
 
     return () => subscription.unsubscribe();
   }, [watch, setValue]);
+
+  if (data) {
+    product = data;
+  }
+
+  if (!error && !data) {
+    return <></>;
+  }
+
+  if (error) {
+    console.log(error);
+    return <Typography>Error while loading information</Typography>;
+  }
 
   const onChangeSize = (size: string) => {
     const currentSizes = getValues('sizes');

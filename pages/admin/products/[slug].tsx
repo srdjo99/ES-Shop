@@ -80,7 +80,7 @@ const ProductAdminPage: FC<Props> = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   const { data, error } = useSWR(
-    router.query.slug !== 'new' ? `/api/products/${router.query.slug}` : product
+    router.query.slug !== 'new' ? `/api/products/${router.query.slug}` : null
   );
 
   const {

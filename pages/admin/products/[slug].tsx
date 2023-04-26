@@ -423,40 +423,23 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   let product: IProduct | null;
 
-  // if (slug === 'new') {
-  //   const tempProduct = JSON.parse(JSON.stringify(new Product()));
-  //   delete tempProduct._id;
-  //   console.log(tempProduct, 'tempProduct');
-  //   product = tempProduct;
-  // } else {
-  //   product = await dbProducts.getProductBySlug(slug.toString());
-  // }
-
-  if (slug !== 'new') {
-    product = await dbProducts.getProductBySlug(slug.toString());
+  if (slug === 'new') {
+    const tempProduct = JSON.parse(JSON.stringify(new Product()));
+    delete tempProduct._id;
+    console.log(tempProduct, 'tempProduct');
+    product = tempProduct;
   } else {
-    product = {
-      description: '',
-      images: [],
-      inStock: 0,
-      price: 0,
-      sizes: [],
-      slug: '',
-      tags: [],
-      title: '',
-      type: 'shirts',
-      gender: 'women',
-    } as any;
+    product = await dbProducts.getProductBySlug(slug.toString());
   }
 
-  // if (!product) {
-  //   return {
-  //     redirect: {
-  //       destination: '/admin/products',
-  //       permanent: false,
-  //     },
-  //   };
-  // }
+  if (!product) {
+    return {
+      redirect: {
+        destination: '/admin/products',
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {

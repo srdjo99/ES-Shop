@@ -59,7 +59,7 @@ type ISize = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
 type IType = 'shirts' | 'pants' | 'hoodies' | 'hats';
 
 interface Props {
-  product: IProduct;
+  product: any;
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
@@ -446,7 +446,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       title: '',
       type: 'shirts',
       gender: 'women',
-    };
+    } as any;
   }
 
   // if (!product) {

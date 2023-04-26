@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import DriveFileRenameOutline from '@mui/icons-material/DriveFileRenameOutline';
 import SaveOutlined from '@mui/icons-material/SaveOutlined';
 import UploadOutlined from '@mui/icons-material/UploadOutlined';
+
 import {
   Box,
   Button,
@@ -61,27 +62,11 @@ interface Props {
   product: IProduct;
 }
 
-let product = {
-  description: '',
-  images: [],
-  inStock: 0,
-  price: 0,
-  sizes: [],
-  tags: [],
-  title: '',
-  type: '',
-  gender: 'women',
-};
-
-const ProductAdminPage: FC<Props> = () => {
+const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newTagValue, setNewTagValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-
-  const { data, error } = useSWR(
-    router.query.slug !== 'new' ? `/api/products/${router.query.slug}` : null
-  );
 
   const {
     register,
@@ -109,19 +94,6 @@ const ProductAdminPage: FC<Props> = () => {
 
     return () => subscription.unsubscribe();
   }, [watch, setValue]);
-
-  if (data) {
-    product = data;
-  }
-
-  if (!error && !data) {
-    return <></>;
-  }
-
-  if (error) {
-    console.log(error);
-    return <Typography>Error while loading information</Typography>;
-  }
 
   const onChangeSize = (size: string) => {
     const currentSizes = getValues('sizes');
@@ -293,7 +265,7 @@ const ProductAdminPage: FC<Props> = () => {
                     key={option}
                     value={option}
                     control={<Radio color='secondary' />}
-                    label={capitalize(option)}
+                    label={option}
                   />
                 ))}
               </RadioGroup>
@@ -312,7 +284,7 @@ const ProductAdminPage: FC<Props> = () => {
                     key={option}
                     value={option}
                     control={<Radio color='secondary' />}
-                    label={capitalize(option)}
+                    label={option}
                   />
                 ))}
               </RadioGroup>
@@ -446,34 +418,51 @@ const ProductAdminPage: FC<Props> = () => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const { slug = '' } = query;
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { slug = '' } = query;
 
-//   let product: IProduct | null;
+  let product: IProduct | null;
 
-//   if (slug === 'new') {
-//     const tempProduct = JSON.parse(JSON.stringify(new Product()));
-//     delete tempProduct._id;
-//     console.log(tempProduct, 'tempProduct');
-//     product = tempProduct;
-//   } else {
-//     product = await dbProducts.getProductBySlug(slug.toString());
-//   }
+  // if (slug === 'new') {
+  //   const tempProduct = JSON.parse(JSON.stringify(new Product()));
+  //   delete tempProduct._id;
+  //   console.log(tempProduct, 'tempProduct');
+  //   product = tempProduct;
+  // } else {
+  //   product = await dbProducts.getProductBySlug(slug.toString());
+  // }
 
-//   if (!product) {
-//     return {
-//       redirect: {
-//         destination: '/admin/products',
-//         permanent: false,
-//       },
-//     };
-//   }
+  if (slug !== 'new') {
+    product = await dbProducts.getProductBySlug(slug.toString());
+  } else {
+    product = {
+      description: '',
+      images: [],
+      inStock: 0,
+      price: 0,
+      sizes: [],
+      slug: '',
+      tags: [],
+      title: '',
+      type: 'shirts',
+      gender: 'women',
+    };
+  }
 
-//   return {
-//     props: {
-//       product,
-//     },
-//   };
-// };
+  // if (!product) {
+  //   return {
+  //     redirect: {
+  //       destination: '/admin/products',
+  //       permanent: false,
+  //     },
+  //   };
+  // }
+
+  return {
+    props: {
+      product,
+    },
+  };
+};
 
 export default ProductAdminPage;

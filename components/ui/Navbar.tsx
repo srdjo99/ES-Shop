@@ -40,12 +40,10 @@ export const Navbar = () => {
   return (
     <AppBar>
       <Toolbar>
-        {/* <NextLink href='/' passHref legacyBehavior> */}
-        <Link href='/' display='flex' alignItems='center'>
+        <Link href='/' display='flex' alignItems='center' component={NextLink}>
           <Typography variant='h6'>ES |</Typography>
           <Typography sx={{ ml: 0.5 }}>Shop</Typography>
         </Link>
-        {/* </NextLink> */}
 
         <Box flex={1} />
 
@@ -55,29 +53,23 @@ export const Navbar = () => {
           }}
           className='fadeIn'
         >
-          {/* <NextLink href='/category/men' passHref> */}
-          <Link href='/category/men'>
+          <Link href='/category/men' component={NextLink}>
             <Button color={asPath === '/category/men' ? 'primary' : 'info'}>
               Men
             </Button>
           </Link>
-          {/* </NextLink> */}
 
-          {/* <NextLink href='/category/women' passHref> */}
-          <Link href='/category/women'>
+          <Link href='/category/women' component={NextLink}>
             <Button color={asPath === '/category/women' ? 'primary' : 'info'}>
               Women
             </Button>
           </Link>
-          {/* </NextLink> */}
 
-          {/* <NextLink href='/category/kid' passHref> */}
-          <Link href='/category/kid'>
+          <Link href='/category/kid' component={NextLink}>
             <Button color={asPath === '/category/kid' ? 'primary' : 'info'}>
               Kids
             </Button>
           </Link>
-          {/* </NextLink> */}
         </Box>
 
         <Box flex={1} />
@@ -122,8 +114,7 @@ export const Navbar = () => {
           <SearchOutlined />
         </IconButton>
 
-        {/* <NextLink href='/cart' passHref> */}
-        <Link href='/cart'>
+        <Link href='/cart' component={NextLink}>
           <IconButton>
             <Badge
               badgeContent={numberOfItems > 9 ? '+9' : numberOfItems}
@@ -133,7 +124,6 @@ export const Navbar = () => {
             </Badge>
           </IconButton>
         </Link>
-        {/* </NextLink> */}
 
         <Button onClick={toggleSideMenu}>Menu</Button>
       </Toolbar>

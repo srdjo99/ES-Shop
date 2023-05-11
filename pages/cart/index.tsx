@@ -13,16 +13,19 @@ import {
 import { CartContext } from '../../context';
 import { ShopLayout } from '../../components/layout';
 import { CartList, OrderSummary } from '../../components/cart';
+import EmptyPage from '../../components/cart/EmptyCart';
 
 const CartPage = () => {
   const { isLoaded, cart } = useContext(CartContext);
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    if (isLoaded && cart.length === 0) {
-      router.replace('/cart/empty');
-    }
-  }, [isLoaded, cart, router]);
+  // useEffect(() => {
+  //   if (isLoaded && cart.length === 0) {
+  //     router.replace('/cart/empty');
+  //   }
+  // }, [isLoaded, cart, router]);
+
+  if (isLoaded && cart.length === 0) return <EmptyPage />;
 
   return (
     <ShopLayout title='Cart' pageDescription='Store shopping cart'>

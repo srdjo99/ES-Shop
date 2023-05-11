@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 import { db } from '../../../database';
 import { IOrder } from '../../../interfaces';
 import { Product, Order } from '../../../models';
+import { getToken } from 'next-auth/jwt';
 
 type Data =
   | {
@@ -26,7 +26,10 @@ export default function handler(
 const createOrder = async (req: any, res: any) => {
   const { orderItems, total } = req.body as IOrder;
 
-  const session: any = await getSession({ req });
+  const session: any = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
   if (!session) {
     return res.status(401).json({ message: 'You must be authenticated' });

@@ -10,12 +10,10 @@ export const AdminNavbar = () => {
   return (
     <AppBar>
       <Toolbar>
-        <NextLink href='/' passHref>
-          <Link href='/' display='flex' alignItems='center'>
-            <Typography variant='h6'>ES |</Typography>
-            <Typography sx={{ ml: 0.5 }}>Shop</Typography>
-          </Link>
-        </NextLink>
+        <Link href='/' display='flex' alignItems='center' component={NextLink}>
+          <Typography variant='h6'>ES |</Typography>
+          <Typography sx={{ ml: 0.5 }}>Shop</Typography>
+        </Link>
 
         <Box flex={1} />
 

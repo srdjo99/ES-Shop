@@ -55,11 +55,8 @@ interface FormData {
   gender: string;
 }
 
-type ISize = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
-type IType = 'shirts' | 'pants' | 'hoodies' | 'hats';
-
 interface Props {
-  product: any;
+  product: IProduct;
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
@@ -137,7 +134,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           '/admin/upload',
           formData
         );
-        console.log(data.message);
         setValue('images', [...getValues('images'), data.message], {
           shouldValidate: true,
         });
@@ -166,13 +162,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         data: form,
       });
 
-      console.log({ data });
-
       if (!form._id) {
         router.replace(`/admin/products/${form.slug}`);
       } else {
         setIsSaving(false);
       }
+      router.push('/admin/products');
     } catch (error) {
       console.log(error);
       setIsSaving(false);
@@ -426,7 +421,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (slug === 'new') {
     const tempProduct = JSON.parse(JSON.stringify(new Product()));
     delete tempProduct._id;
-    console.log(tempProduct, 'tempProduct');
     product = tempProduct;
   } else {
     product = await dbProducts.getProductBySlug(slug.toString());

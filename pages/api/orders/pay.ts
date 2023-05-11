@@ -87,7 +87,6 @@ const payOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   if (dbOrder.total !== Number(data.purchase_units[0].amount.value)) {
-    console.log(dbOrder.total, data.purchase_units[0].amount.value);
     await db.disconnect();
     return res
       .status(400)

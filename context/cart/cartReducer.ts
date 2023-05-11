@@ -37,7 +37,7 @@ export const cartReducer = (
         ...state,
         isLoaded: true,
         // not destructuring - always new product
-        cart: action.payload,
+        cart: [...action.payload],
       };
     case '[Cart] - Update products in cart':
       return {

@@ -75,7 +75,7 @@ const registerUser = async (
       message: 'Review server logs',
     });
   } finally {
-    db.disconnect();
+    await db.disconnect();
   }
 
   const { _id, role } = newUser;

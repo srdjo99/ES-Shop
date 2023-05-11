@@ -3,15 +3,24 @@ import { Typography } from '@mui/material';
 
 import { ShopLayout } from '../components/layout/ShopLayout';
 import { ProductList } from '../components/products';
-import { useProducts } from '../hooks';
-import { FullScreenLoading } from '../components/ui';
+import { dbProducts } from '../database';
+import { IProduct } from '../interfaces';
 
-const Home: NextPage = () => {
-  const { products, isLoading, isError } = useProducts('/products');
+interface Props {
+  products: IProduct[];
+}
 
+export const getServerSideProps = async () => {
+  const products = await dbProducts.getAllProducts();
+  return {
+    props: { products },
+  };
+};
+
+const Home: NextPage<Props> = ({ products }) => {
   return (
     <ShopLayout
-      title='ES-Shop - Home '
+      title='S Shop - Home'
       pageDescription='Find products suitable just for you'
     >
       <Typography variant='h1' component='h1'>
@@ -21,7 +30,7 @@ const Home: NextPage = () => {
         All the products
       </Typography>
 
-      {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
+      <ProductList products={products} />
     </ShopLayout>
   );
 };

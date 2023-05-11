@@ -1,11 +1,12 @@
 'use client';
-import { FC, useEffect, useReducer, ReactNode } from 'react';
+import { FC, useEffect, useReducer, ReactNode, useLayoutEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
 import { ICartProduct, IOrder, ShippingAddress } from '../../interfaces';
 import { cartReducer, CartContext } from './';
 import { shopApi } from '../../shopApi';
+import { useRouter } from 'next/router';
 
 export interface CartState {
   isLoaded: boolean;
@@ -29,6 +30,24 @@ const CART_INITIAL_STATE: CartState = {
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
+  const router = useRouter();
+
+  useEffect(() => {
+    try {
+      const cookieProducts = Cookies.get('cart')
+        ? JSON.parse(Cookies.get('cart')!)
+        : [];
+      dispatch({
+        type: '[Cart] - LoadCart from cookies | storage',
+        payload: cookieProducts,
+      });
+    } catch (error) {
+      dispatch({
+        type: '[Cart] - LoadCart from cookies | storage',
+        payload: [],
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (Cookies.get('firstName')) {
@@ -51,9 +70,9 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (state.cart.length > 0) {
-      Cookies.set('cart', JSON.stringify(state.cart));
-    }
+    // if (state.cart.length > 0) {
+    Cookies.set('cart', JSON.stringify(state.cart));
+    // }
   }, [state.cart]);
 
   useEffect(() => {
@@ -158,7 +177,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
         hasError: false,
         message: data._id!,
       };
-    } catch (error) {
+    } catch (error: any) {
       if (axios.isAxiosError(error)) {
         return {
           hasError: true,

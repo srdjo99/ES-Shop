@@ -53,7 +53,6 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
     orderId: order._id,
   }));
 
-  console.log(rows);
 
   return (
     <ShopLayout

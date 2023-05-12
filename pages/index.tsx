@@ -5,19 +5,16 @@ import { ShopLayout } from '../components/layout/ShopLayout';
 import { ProductList } from '../components/products';
 import { dbProducts } from '../database';
 import { IProduct } from '../interfaces';
+import { useProducts } from '../hooks';
+import { FullScreenLoading } from '../components/ui';
 
 interface Props {
   products: IProduct[];
 }
 
-export const getServerSideProps = async () => {
-  const products = await dbProducts.getAllProducts();
-  return {
-    props: { products },
-  };
-};
+const Home: NextPage<Props> = () => {
+  const { products, isLoading } = useProducts('/products');
 
-const Home: NextPage<Props> = ({ products }) => {
   return (
     <ShopLayout
       title='S Shop - Home'
@@ -30,7 +27,7 @@ const Home: NextPage<Props> = ({ products }) => {
         All the products
       </Typography>
 
-      <ProductList products={products} />
+      {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
     </ShopLayout>
   );
 };

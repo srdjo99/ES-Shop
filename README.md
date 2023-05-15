@@ -1,7 +1,7 @@
 # E-commerce shop - NextJS 
 
 ## About
-The project I dedicated the most time to is ES-Shop, an online e-commerce platform that served as my primary practice project.
+The project I dedicated the most of my free time to is ES-Shop, an online e-commerce platform that served as my primary practice project.
 Major functionalities are finished, but it still needs some "polishing".
 It is deployed on DigitalOcean Droplet.
 
@@ -12,11 +12,7 @@ There are 2 roles: admin and client. If you want to see admin features, here are
       email: srdjan@gmail.com 
       password: 123456
   ```
-  Here are credentials for client account:
-  ``` 
-      email: test@gmail.com
-      password: 123456
-  ```
+To sign-in as a client, you can use Github sign-in option.
   
 ## As an admin, you have access to more features as you will see.
 

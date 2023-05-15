@@ -8,11 +8,13 @@ It is deployed on DigitalOcean Droplet.
 ### [Shop - link](https://sbio.online/)
 
 There are 2 roles: admin and client. If you want to see admin features, here are credentials for test admin account:
-  ``` email: srdjan@gmail.com 
+  ``` 
+      email: srdjan@gmail.com 
       password: 123456
   ```
   Here are credentials for client account:
-  ``` email: test@gmail.com
+  ``` 
+      email: test@gmail.com
       password: 123456
   ```
   
